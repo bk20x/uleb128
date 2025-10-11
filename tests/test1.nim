@@ -1,7 +1,7 @@
 import unittest
 
 import uleb128
-test "can decode":
+test "can encode/decode":
   let
     data: uint = 29912
     encoded = uleb128Encode data
