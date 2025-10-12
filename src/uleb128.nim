@@ -47,9 +47,9 @@ proc leb128Encode*(value: int): seq[uint8] =
 
 proc leb128Decode*(data: seq[uint8]): int =
   var
-    shift = 0
-    i = 0
     b: uint8
+    i = 0
+    shift = 0
   while true:
     b = data[i]
     result = result or int(b and 0x7f) shl shift
