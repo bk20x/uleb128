@@ -1,5 +1,7 @@
 
 
+
+
 proc uleb128Encode*(value: uint): seq[uint8] =
   var
     v = value
@@ -15,17 +17,56 @@ proc uleb128Encode*(value: uint): seq[uint8] =
 
 proc uleb128Decode*(data: openArray[uint8]): uint64 =
   var
-    shift: uint64 = 0
     i = 0
+    shift: uint64 = 0
   while true:
     if i < data.len:
-      var b = data[i]
-      inc i
+      let b = data[i]
       result = result or (uint64(b and 0x7f) shl shift)
       if not bool(b and 0x80): break
+      inc i
       inc shift, 7
     else:
       return 0
   return result
 
 
+proc leb128Encode*(value: int): seq[uint8] =
+  var val = value
+  while true:
+    let
+      b = uint8(val and 0x7f)
+      signBitSet = (b and 0x40'u8) != 0'u8
+    val = ashr(val, 7)
+    if (val == 0 and not signBitSet) or (val == -1 and signBitSet):
+      result.add b
+      break
+    else:
+      result.add b or 0x80'u8
+  return result
+
+proc leb128Decode*(data: seq[uint8]): int =
+  var
+    shift = 0
+    i = 0
+    b: uint8
+  while true:
+    b = data[i]
+    result = result or int(b and 0x7f) shl shift
+    shift += 7
+    if not bool(b and 0x80): break
+    inc i
+  let
+    signBitSet = (b and 0x40'u8) != 0'u8
+    size = sizeof(result) * 8
+  if signBitSet and (shift < size):
+    result = result or (int(-1) shl shift)
+  return result
+
+
+      
+    
+    
+    
+
+  
