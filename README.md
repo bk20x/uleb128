@@ -14,7 +14,7 @@ block:
 # leb128
 block:
   let
-    data = 23852835925
+    data: int = 23852835925
     encoded = leb128Encode data
     decoded = leb128Decode data
 
