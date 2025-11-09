@@ -1,5 +1,5 @@
 # uleb128
-## signed and unsigned little endian base128 encoding in pure Nim.
+### signed and unsigned little endian base128 encoding in pure Nim.
 
 ##### Install through nimble with:
 ```
