@@ -6,7 +6,7 @@
 nimble install uleb128
 ```
 
-```
+```nim
 import uleb128
 
 # uleb128
